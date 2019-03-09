@@ -31,9 +31,28 @@ def dodaj_klase():
         flash("Klasa dodana", 'alert alert-success')
         return redirect(url_for('lista_klas'))
     elif request.method == 'POST':
-        flash("Nie uzupełniono wymaganych pól", 'alert alert-danger')
+        flash("Wprowadź dane do wymaganych pól", 'alert alert-danger')
 
     return render_template('dodaj_klase.html', form=form)
+    
+@app.route('/edytuj_klase/<int:k_id>', methods=['GET', 'POST'])
+def edytuj_klase(k_id):
+    klasa = get_object_or_404(Klasa, Klasa.id == k_id)
+    form = KlasaForm(nazwa=klasa.nazwa,
+                     rok_naboru=klasa.rok_naboru, rok_matury=klasa.rok_matury)
+
+    if form.validate_on_submit():
+        klasa.nazwa = form.nazwa.data
+        klasa.rok_naboru = form.rok_naboru.data
+        klasa.rok_matury = form.rok_matury.data
+        klasa.save()
+        flash("Zapisano", 'alert alert-success')
+        return redirect(url_for('lista_klas'))
+    elif request.method == 'POST':
+        flash("Wprowadź dane do wymaganych pól", 'alert alert-danger')
+
+    return render_template('edytuj_klase.html', form=form, klasa=klasa)
+
     
 @app.route('/lista_uczniow')
 def lista_uczniow():
@@ -53,6 +72,6 @@ def dodaj_ucznia():
         flash("Uczeń dodany", 'alert alert-success')
         return redirect(url_for('lista_uczniow'))
     elif request.method == 'POST':
-        flash("Nie uzupełniono wymaganych pól", 'alert alert-danger')
+        flash("Wprowadź dane do wymaganych pól", 'alert alert-danger')
 
     return render_template('dodaj_ucznia.html', form=form)
