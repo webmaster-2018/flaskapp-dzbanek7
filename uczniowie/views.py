@@ -106,6 +106,14 @@ def edytuj_ucznia(u_id):
         flash("Wprowadź dane do wymaganych pól", 'alert alert-danger')
     return render_template('edytuj_ucznia.html', form=form, uczen=uczen)
     
+@app.route('/usun_ucznia/<int:u_id>')
+def usun_ucznia(u_id):
+    uczen = get_object_or_404(Uczen, Uczen.id == u_id)
+    uczen.delete_instance()
+    flash("Uczeń usunięty", 'alert alert-success')
+    return redirect(url_for('lista_uczniow'))
+
+    
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html'), 404
