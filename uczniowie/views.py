@@ -35,6 +35,13 @@ def dodaj_klase():
 
     return render_template('dodaj_klase.html', form=form)
     
+@app.route('/usun_klase/<int:k_id>')
+def usun_klase(k_id):
+    klasa = get_object_or_404(Klasa, Klasa.id == k_id)
+    klasa.delete_instance()
+    flash("Usunięto", 'alert alert-success')
+    return redirect(url_for('lista_klas'))
+    
 @app.route('/edytuj_klase/<int:k_id>', methods=['GET', 'POST'])
 def edytuj_klase(k_id):
     klasa = get_object_or_404(Klasa, Klasa.id == k_id)
